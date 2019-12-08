@@ -1,0 +1,130 @@
+﻿@using CaptchaMvc.HtmlHelpers;
+@using CaptchaMvc;
+
+@using WebSiteBanHang.Models;
+@model ThanhVienTB
+@{
+    ViewBag.Title = "DangKy";
+    Layout = "~/Views/Layout/ProductLayout.cshtml";
+}
+<div class="col-md-9 product-price1">
+    <div class=" register">
+        <h2>
+            @ViewBag.ThongBao</h2>
+        <h1>Đăng ký thành viên</h1>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-6 register-top-grid">
+                <h3>Thông tin cá nhân</h3>
+                <div>
+                    <span>Tài khoản</span>
+                    @Html.TextBox("TaiKhoan", null)
+
+                    @Html.ValidationMessageFor(model => model.TaiKhoan, null, new { style = "color:Orange" })
+                    <br />
+                </div>
+                <div>
+                    <span>Họ tên</span>
+                    @Html.TextBox("HoTen", null)
+                    @Html.ValidationMessageFor(model => model.HoTen, null, new { style = "color:Orange" })
+                    <br />
+                </div>
+                <div>
+                    <span>Địa chỉ</span>
+                    @Html.TextBox("DiaChi", null)
+                    @Html.ValidationMessageFor(model => model.DiaChi, null, new { style = "color:Orange" })
+                    <br />
+                </div>
+                <div>
+                    <span>Email</span>
+                    @Html.TextBox("Email", null)
+                    @Html.ValidationMessageFor(model => model.Email, null, new { style = "color:Orange" })
+                    <br />
+                </div>
+                <div>
+                    <span>Số điện thoại</span>
+                    @Html.TextBox("SoDienThoai", null)
+                    @Html.ValidationMessageFor(model => model.SoDienThoai, null, new { style = "color:Orange" })
+                    <br />
+                </div>
+                <a class="news-letter" href="#">
+                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label>
+                </a>
+            </div>
+            <div class="col-md-6 register-bottom-grid">
+                <h3>Thông tin đăng nhập</h3>
+                <div>
+                    <span>Mật khẩu</span>
+                    @Html.Password("MatKhau", null, new { id = "Password" })
+                    @Html.ValidationMessageFor(model => model.MatKhau, null, new { style = "color:Orange", id = "messageP" })
+                    <br />
+                </div>
+                <div>
+                    <span>Nhập lại mật khẩu</span>
+                    @Html.Password("NhapLaiMatKhau", null, new { id = "RePassword" })
+                    @Html.ValidationMessageFor(model => model.MatKhau, null, new { style = "color:Orange", id = "message" })
+                    <br />
+                </div>
+                <div>
+                    <span>Câu hỏi bí mật</span>
+                    @Html.DropDownList("CauHoi", null, new { style = "width:100%;border: 1px solid #A09F9F;padding:1em;margin:1em 0;" })
+                    @Html.ValidationMessageFor(model => model.CauHoi, null, new { style = "color:Orange", id = "Question" })
+                    <br />
+                </div>
+
+                <div>
+                    <span>Câu trả lời</span>
+                    @Html.TextBox("CauTraLoi", null, new { style = "width:100%;border: 1px solid #A09F9F;padding:1em;margin:1em 0;" })
+                    @Html.ValidationMessageFor(model => model.CauTraLoi, null, new { style = "color:Orange", id = "Answer" })
+                    <br />
+                </div>
+                <div>
+                    @Html.MathCaptcha()
+                </div>
+                <br />
+                <input type="submit" value="Đăng nhập" id="Submit">
+
+            </div>
+            <div class="clearfix"> </div>
+        }
+    </div>
+    </div>
+
+
+<script type="text/javascript">
+    //$("#Submit").click(function () {
+    //    if ($("#Answer").val() == "") {
+    //        $('#Question').html('Vui lòng chọn câu hỏi').css('color', 'Grange');
+    //    }
+    //});
+    
+    $("#Password, #RePassword").on("keyup", function () {
+        var pass = $("#Password").val();
+        var repass = $("#RePassword").val();
+        if (pass == "") {
+             $('#message').html('Nhập lại mật khẩu').css('color', 'Grange');
+            $('#messageP').html('Yêu cầu nhập mật khẩu').css('color', 'Grange');
+            return;
+        }
+        if (pass == repass) {
+            if (pass == "") {
+                //$('#message').html('Yêu cầu nhập mật khẩu').css('color', 'Grange');
+                $('#messageP').html('Yêu cầu nhập mật khẩu').css('color', 'Grange');
+            }
+            else {
+                $('#message').html('Mật khẩu hợp lệ').css('color', 'Grange');
+                $('#messageP').html('Mật khẩu hợp lệ').css('color', 'Grange');
+            }
+        }
+        else if (pass != "" && repass == "") {
+            $('#message').html('Nhập lại mật khẩu').css('color', 'Grange');
+            //$('#messageP').html('Mật khẩu không trùng').css('color', 'Grange');
+        }
+        else {
+            $('#message').html('Mật khẩu không trùng').css('color', 'Grange');
+            $('#messageP').html('Mật khẩu không trùng').css('color', 'Grange');
+        }
+    });
+</script>

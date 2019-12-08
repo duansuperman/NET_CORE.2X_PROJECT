@@ -1,0 +1,159 @@
+﻿@using WebSiteBanHang.Models;
+
+
+<div class="header-top">
+    <div class="container">
+        <div class="search">
+            
+            
+                <input type="text" id="tukhoa" name="tukhoa" placeholder="Nhập tên sản phẩm"  onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}">
+                <input type="submit" value="Tìm kiếm" id="btnSearch">
+           
+        </div>
+        <div class="header-left">
+            @if (Session["TaiKhoan"] != null && Session["TaiKhoan"].ToString() != "")
+            {
+                ThanhVienTB tv = (ThanhVienTB)Session["TaiKhoan"];
+                <ul>
+                    
+                    <li style="color:white">Chào ! @tv.HoTen</li>
+                    <br />
+                    <li style="width:100%" ><a style="color:red; float:right" href="@Url.Action("DangXuat","Home")">Đăng xuất</a></li>
+
+                </ul>
+
+            }
+            else { 
+                <ul>
+                    <li><a id="btnDangNhap" href="#">Đăng nhập</a></li>
+                    <li><a href="@Url.Action("DangKy","Home")">Đăng ký</a></li>
+
+                </ul>
+            }
+            @Html.Action("GioHangPartial","GioHang")
+            @*<div class="cart box_1">
+                <a href="checkout.html">
+                    <h3>
+                        <div class="total">
+                            <span class="simpleCart_total">$0.00</span> (<span id="simpleCart_quantity" class="simpleCart_quantity">0</span> items)
+                        </div>
+                        <img src="~/Content/images/cart.png" alt="">
+                    </h3>
+                </a>
+                <p><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
+
+            </div>*@
+            <div class="clearfix"> </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+</div>
+
+<div id="popup-login">
+    <div class=" w3l-login-form">
+        <div style="clear:both;text-align:right;margin-bottom:0">
+            <span id="close-form" class="btn btn-danger">X</span>
+        </div>
+        <h2>Login Here</h2>
+        @using (Html.BeginForm("DangNhap", "Home"))
+        {
+
+            <div class=" w3l-form-group">
+                <label>Tài khoản:</label>
+                <div class="group">
+                    <i class="fas fa-user"></i>
+                    <input id="username" type="text" class="form-control" placeholder="Tài khoản" required="required" name="userName">
+                </div>
+            </div>
+            <div class=" w3l-form-group">
+                <label>Mật khẩu:</label>
+                <div class="group">
+                    <i class="fas fa-unlock"></i>
+                    <input id="password" type="password" class="form-control" placeholder="Mật khẩu" required="required" name="passWord">
+                </div>
+            </div>
+            <div class="forgot">
+                <a href="@Url.Action("QuenMatKhau","Home")">Quên mật khẩu?</a>
+                <p><input type="checkbox">Remember Me</p>
+            </div>
+            <button id="btnSubmit" type="submit">Đăng nhập</button>
+        }
+        <p class=" w3l-register-p">Chưa có tài khoản ?<a href="@Url.Action("DangKy","Home")" class="register"> Đăng ký</a></p>
+    </div>
+</div>
+
+<style>
+    
+
+    #close-form {
+        color: white;
+    }
+
+    #popup-login {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.5);
+        z-index: 3;
+        display: none;
+    }
+</style>
+
+<script type="text/javascript">
+    $("#btnDangNhap").click(function () {
+        $("#popup-login").fadeIn(500);
+    });
+
+    //Bắt sựu kiện ẩn form
+    $("#close-form").click(CloseForm);
+
+    //Định nghĩa ẩn form
+    function CloseForm() {
+        $("#popup-login").hide();
+    }
+    //Lấy giá trị trong textbox
+    $("#btnSubmit").click(function () {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        //alert("Username : " + username + "\nPassWord : " + password);
+        if (username == "" || password == "") {
+            alert("error!");
+            return;
+        }
+    });
+
+    $('#btnSearch').on('click', function (c) {
+        
+                    $.ajax({
+                            type: 'POST',
+                            data: { tukhoa:$("#tukhoa").val(),page:1 },
+                            url: '@Url.Action("TimKiemSanPham","SanPham")',
+                            success: function (ketqua) {
+
+                                $('#KQTimKiem').html(ketqua);
+                            }
+                    });
+    });
+
+
+</script>
+@*<script>
+    $(document).ready(function (c) {
+        $("#btnSearch").on('click', function (c) {
+            alert("NO");
+            var tk = $("#tukhoa").val;
+            $.ajax({
+                type: 'POST',
+                data: { tukhoa: ,page:1},
+                url: '@Url.Action("TimKiemSanPham","SanPham")',
+                success: function (ketqua) {
+                    $("#KQTimKiem").html(ketqua);
+                }
+            });
+        });
+    });
+
+    
+</script>*@

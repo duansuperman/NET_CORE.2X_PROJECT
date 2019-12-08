@@ -1,0 +1,52 @@
+﻿
+<div class="agile_top_w3_grids">
+    <ul class="ca-menu">
+        <li>
+            <a href="#">
+
+                <i class="fa fa-server" aria-hidden="true"></i>
+                <div class="ca-content">
+                    <h4 class="ca-main">@ViewBag.SoNguoiTruyCap</h4>
+                    <h3 class="ca-sub">Số lượng truy cập</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <div class="ca-content">
+                    <h4 class="ca-main one">@ViewBag.SoNguoiOnline</h4>
+                    <h3 class="ca-sub one">Số lượng online</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","QuanLySanPham")">
+                <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                <div class="ca-content">
+                    <h4 class="ca-main two">@ViewBag.SoLuongSP</h4>
+                    <h3 class="ca-sub two">Tổng số sản phẩm</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","QuanLyThanhVien")">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <div class="ca-content">
+                    <h4 class="ca-main three">@ViewBag.SoLuongTV</h4>
+                    <h3 class="ca-sub three">Tổng số thành viên</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","QuanLyDonHang")">
+                <i class="fa fa-clone" aria-hidden="true"></i>
+                <div class="ca-content">
+                    <h4 class="ca-main four">@ViewBag.SoLuongDDH</h4>
+                    <h3 class="ca-sub four">Tổng số đơn đặt hàng</h3>
+                </div>
+            </a>
+        </li>
+        <div class="clearfix"></div>
+    </ul>
+</div>

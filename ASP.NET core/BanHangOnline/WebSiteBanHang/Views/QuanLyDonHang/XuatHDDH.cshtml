@@ -1,0 +1,190 @@
+﻿@using WebSiteBanHang.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<ChiTietDonDatHang>
+@{
+    ViewBag.Title = "XuatHDDH";
+    Layout = null;
+}
+
+@{
+    QuanLyBanHangEntities db = new QuanLyBanHangEntities();
+
+
+    int MaDDH = int.Parse(ViewBag.MaDDH.ToString());
+    double TongTien = (double)Model.Sum(s => s.DonGia * s.SoLuong);
+    DonDatHang ddh = db.DonDatHangs.SingleOrDefault(s => s.MaDDH == MaDDH);
+    int KM = (int)ddh.UuDai;
+    double TongTienKM = (double)(1 - KM*1.0 / 100) * TongTien;
+
+
+}
+
+    <div>
+        <link rel="stylesheet" type="text/css" href="~/Content/Admin/css/table-style.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/Admin/css/basictable.css" />
+        <link href="~/Content/Admin/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/component.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/export.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/flipclock.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/circles.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/style_grid.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="~/Content/Admin/css/style.css" rel="stylesheet" type="text/css" media="all" />
+
+        <!-- font-awesome-icons -->
+        <link href="~/Content/Admin/css/font-awesome.css" rel="stylesheet">
+        <!-- //font-awesome-icons -->
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+        <!--jquery-->
+        <script src="~/Content/js/jquery.min.js"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    </div>
+    <div class="wthree_agile_admin_info">
+        <div class="inner_content">
+            <div class="social_media_w3ls">
+
+
+
+
+                <div class="col-md-12 socail_grid_agile dribble">
+
+                    <ul class="icon_w3_info">
+                        <li><a href="#" class="wthree_facebook"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+                        <li>Thông tin khách hàng</li>
+                        
+                    </ul>
+                    <ul class="icon_w3_social">
+                        <li><i class="fa fa-comment-o" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-envelope-o" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-user" aria-hidden="true"></i></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                    <div class="bottom_info_social">
+                        <div class="col-md-4 agile_w3l_social_media_text_img">
+                            <img src="images/a4.jpg" alt="">
+                        </div>
+                        <div class="col-md-12 agile_w3l_social_media_text" style="text-align:center">
+                            <h4>KH: @Html.DisplayFor(model => ddh.KhachHang.TenKH)</h4>
+                            <p>Địa chỉ: @Html.DisplayFor(model => ddh.KhachHang.DiaChi)</p>
+                            <p><span class="fa fa-home"></span><span>Shop PhanAnh Computer. Địa chỉ: 66 Thành Thái,p.6,Q.10 </span></p>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- /inner_content_w3_agile_info-->
+
+
+            <div class="inner_content_w3_agile_info two_in">
+                <h2 class="w3_inner_tittle">Hóa đơn đặt hàng</h2>
+                <!-- tables -->
+
+                <div class="agile-tables">
+                    <div class="w3l-table-info agile_info_shadow">
+                        <h3 class="w3_inner_tittle two col-sm-10">Thông tin đặt hàng</h3>
+                        <a href="@Url.Action("Print","QuanLyDonHang",new { @MaDDH=MaDDH})" target="_blank" class="btn btn-success col-sm-2">Xuất hóa đơn</a>
+                        <table id="table">
+                            <thead>
+                                <tr>
+
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá(VNĐ)</th>
+                                    <th>Giá trị DH(chưa tính KM) VNĐ</th>
+                                    <th>Hình thức</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    double DG = (double)item.DonGia;
+                                    double Tong = (double)item.SoLuong * (double)item.DonGia;
+                                    <tr>
+
+                                        <td>@Html.DisplayFor(model => item.SanPham.TenSP)</td>
+                                        <td><img src="~/Content/HinhAnhSP/@item.SanPham.HinhAnh" style="width:100px;height:100px" /></td>
+                                        <td>@item.SoLuong</td>
+                                        <td>@DG.ToString("#,##")</td>
+                                        <td>@Tong.ToString("#,##")</td>
+
+                                        @{
+                                            var sp = db.SanPhams.SingleOrDefault(s => s.MaSP == item.MaSP);
+                                        }
+                                        @if (sp.Moi == 0)
+                                        {
+                                            <td>Mới</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Mới 98%</td>
+                                        }
+
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                            <tbody>
+                                <tr>
+
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Tổng tiền: @TongTien.ToString("#,##") VNĐ</th>
+                                </tr>
+                                <tr>
+
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Khuyến Mãi: @KM % </th>
+                                </tr>
+                                <tr>
+
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Tổng tiền thanh toán(Đã KM): @TongTienKM.ToString("#,##") VNĐ</th>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    
+                </div>
+
+                <div class="pagination col-md-9" style="float:right">
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("XuatHDDH", new { page = page, @MaDDH = MaDDH }))
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            </div>
+        </div>
+        <!-- //inner_content_w3_agile_info-->
+        <script type="text/javascript">
+            var dem = 0;
+            function Xoa(event) {
+                if (confirm('Bạn chắc chắn xóa đơn hàng?') == false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+            }
+        </script>
+

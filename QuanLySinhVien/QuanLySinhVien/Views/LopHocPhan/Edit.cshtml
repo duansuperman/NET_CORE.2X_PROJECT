@@ -1,0 +1,67 @@
+﻿@model QuanLySinhVien.Models.LopHocPhan
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+<h4>LopHocPhan</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="MaHocPhan" class="control-label"></label>
+                <input asp-for="MaHocPhan" class="form-control" />
+                <span asp-validation-for="MaHocPhan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NamHoc" class="control-label"></label>
+                <input asp-for="NamHoc" class="form-control" />
+                <span asp-validation-for="NamHoc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HocKy" class="control-label"></label>
+                <input asp-for="HocKy" class="form-control" />
+                <span asp-validation-for="HocKy" class="text-danger"></span>
+            </div>
+            @{
+                QLSVContext db = new QLSVContext();
+                var monHoc = db.MonHoc;
+                var sinhVien = db.SinhVien;
+            }
+            <div class="form-group">
+                <label asp-for="MaMon" class="control-label"></label>
+                <select asp-for="MaMon" class="form-control" asp-items="@(new SelectList(monHoc.ToList(),"MaMon","TenMon"))"></select>
+                <span asp-validation-for="MaMon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaSV" class="control-label"></label>
+                <select asp-for="MaSV" class="form-control" asp-items="@(new SelectList(sinhVien.ToList(),"MaSV","HoTen"))"></select>
+                <span asp-validation-for="MaSV" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+            <script type="text/javascript">
+                $('#MaSV').on('change', function (e) {
+                    //var optionSelected = $("option:selected", this);
+                    //var valueSelected = this.value;
+                    //alert(valueSelected);
+                    alert('ok');
+                });
+            </script>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<GenerateViewFromModel.Models.Product>
+
+@{
+    ViewData["Title"] = "ShowAll";
+}
+
+<h2>ShowAll</h2>
+<h3>@ViewData["DeleteResult"]</h3>
+<h3>@ViewData["InsertResult"]</h3>
+<h3>@ViewData["UpdateResult"]</h3>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Price
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Update","Product", new { @iD=item.Id }) 
+                @Html.ActionLink("Details","Detail","Product", new { @iD=item.Id }) 
+                @Html.ActionLink("Delete","Delete","Product", new { @iD = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

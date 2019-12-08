@@ -1,0 +1,138 @@
+﻿@using WebSiteBanHang.Models;
+@model IEnumerable<SanPham>
+    <div class="col-md-3 product-price">
+
+        <div class=" rsidebar span_1_of_left">
+            <div class="of-left">
+                <h3 class="cate">Loại sản phẩm</h3>
+            </div>
+            <ul class="menu">
+                @foreach (var item in Model.GroupBy(g => g.LoaiSanPham))
+                {
+                    if (item.Key != null)
+                    {
+                        <li class="item1">
+                            <a href="@Url.Action("SanPhamByLSP","SanPham",new { @LSP=item.Key.MaLoaiSP})">@item.Key.TenLoai </a>
+                            <ul class="cute">
+                                @foreach (var el in item.GroupBy(g => g.NhaSanXuat))
+                                {
+                                    if (el.Key != null)
+                                    {
+                                        <li class="subitem1"><a href="@Url.Action("SanPham","SanPham",new { @LSP=item.Key.MaLoaiSP,@NSX=el.Key.MaNSX})">@el.Key.TenNSX </a></li>
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                    }
+                }
+
+            </ul>
+        </div>
+        <!--initiate accordion-->
+        <script type="text/javascript">
+                    $(function () {
+                        var menu_ul = $('.menu > li > ul'),
+                            menu_a = $('.menu > li > a');
+                        menu_ul.hide();
+                        menu_a.click(function (e) {
+                            e.preventDefault();
+                            if (!$(this).hasClass('active')) {
+                                menu_a.removeClass('active');
+                                menu_ul.filter(':visible').slideUp('normal');
+                                $(this).addClass('active').next().stop(true, true).slideDown('normal');
+                            } else {
+                                $(this).removeClass('active');
+                                $(this).next().stop(true, true).slideUp('normal');
+                            }
+                        });
+
+                    });
+
+/**/</script>
+        <!---->
+        <div class="product-middle">
+
+            <div class="fit-top">
+                <h6 class="shop-top">Lorem Ipsum</h6>
+                <a href="#" class="shop-now">SHOP NOW</a>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+        <div class="sellers">
+            <div class="of-left-in">
+                <h3 class="tag">Tags</h3>
+            </div>
+            <div class="tags">
+                <ul>
+                    <li><a href="#">design</a></li>
+                    <li><a href="#">fashion</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">dress</a></li>
+                    <li><a href="#">fashion</a></li>
+                    <li><a href="#">dress</a></li>
+                    <li><a href="#">design</a></li>
+                    <li><a href="#">dress</a></li>
+                    <li><a href="#">design</a></li>
+                    <li><a href="#">fashion</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">dress</a></li>
+
+                    <div class="clearfix"> </div>
+                </ul>
+
+            </div>
+
+        </div>
+        <!---->
+        <div class="product-bottom">
+            <div class="of-left-in">
+                <h3 class="best">Bán chạy nhất</h3>
+            </div>
+            <div class="product-go">
+                <div class=" fashion-grid">
+                    <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=Model.ElementAt(0).MaSP})"><img class="img-responsive " src="@Url.Content("~/Content/HinhAnhSP/"+Model.ElementAt(0).HinhAnh)" alt=""></a>
+
+                </div>
+                <div class=" fashion-grid1">
+                    <h6 class="best2">
+                        <a href="#">
+                            @Model.ElementAt(0).TenSP
+                        </a>
+                    </h6>
+
+                    <span class=" price-in1"> @Model.ElementAt(0).DonGia.Value.ToString("#,##") VNĐ</span>
+                </div>
+
+                <div class="clearfix"> </div>
+            </div>
+            <div class="product-go">
+                <div class=" fashion-grid">
+                    <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=Model.ElementAt(1).MaSP})"><img class="img-responsive " src="@Url.Content("~/Content/HinhAnhSP/"+Model.ElementAt(1).HinhAnh)" alt=""></a>
+
+                </div>
+                <div class="fashion-grid1">
+                    <h6 class="best2">
+                        <a href="#">
+                            @Model.ElementAt(1).TenSP
+                        </a>
+                    </h6>
+
+                    <span class=" price-in1"> @Model.ElementAt(1).DonGia.Value.ToString("#,##") VNĐ</span>
+                </div>
+
+                <div class="clearfix"> </div>
+            </div>
+
+        </div>
+        @*<div class=" per1">
+            <a href="#">
+                <img class="img-responsive" src="~/Content/images/pro.jpg" alt="">
+                <div class="six1">
+                    <h4>DISCOUNT</h4>
+                    <p>Up to</p>
+                    <span>60%</span>
+                </div>
+            </a>
+        </div>*@
+    </div>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.LopHocPhan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaHocPhan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HocKy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SinhVien)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaHocPhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NamHoc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HocKy)
+                </td>
+                @{
+                    QLSVContext db = new QLSVContext();
+                    var sinhVien = db.SinhVien.SingleOrDefault(s => s.MaSV == item.MaSV);
+                    var monHoc = db.MonHoc.SingleOrDefault(s => s.MaMon == item.MaMon);
+                }
+                <td>
+                    <span>@monHoc.TenMon</span>
+                </td>
+                <td>
+                    <span>@sinhVien.HoTen</span>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

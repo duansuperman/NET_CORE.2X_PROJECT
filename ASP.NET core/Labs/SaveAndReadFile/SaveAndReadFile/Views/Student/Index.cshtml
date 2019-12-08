@@ -1,0 +1,47 @@
+﻿@model SaveAndReadFile.Models.StudentInfo
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<h4>StudentInfo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Manage">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @ViewBag.Message
+            </div>
+            <div class="form-group">
+                <label name="Id" class="control-label"></label>
+                <input name="Id" class="form-control" value="@ViewBag.Id"/>
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label name="Name" class="control-label"></label>
+                <input name="Name" class="form-control" value="@ViewBag.Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label name="Marks" class="control-label"></label>
+                <input name="Marks" class="form-control" value="@ViewBag.Marks"/>
+                
+            </div>
+            <div class="form-group">
+                <input type="submit" name="command" value="Lưu" class="btn btn-default" />
+                <input type="submit" name="command" value="Mở" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

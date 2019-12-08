@@ -1,0 +1,90 @@
+﻿@using WebSiteBanHang.Models;
+@model ChiTietPhieuNhap
+@{
+    ViewBag.Title = "CapNhatCT";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Cập nhật chi tiết phiếu nhập</li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">Cập nhật mã chi tiết phiếu nhập: @Model.MaChiTietPN</h2>
+    <!-- tables -->
+
+    <div class="agile-tables">
+        <div class="w3l-table-info agile_info_shadow">
+            <h3 class="w3_inner_tittle two">Cập nhật</h3>
+            <table id="table">
+                @using (Html.BeginForm())
+                {
+                    <thead>
+                        <tr>
+                            <th>Mã chi tiết phiếu nhập</th>
+                            <th>Mã phiếu nhập (không được thay đổi)</th>
+                            <th>Chọn sản phẩm cập nhật</th>
+                            <th>Nhập đơn giá mới nếu muốn thay đổi</th>
+                            <th>Nhập số lượng hàng nếu muốn thay đổi</th>
+                            <th> Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr>
+
+                            <td>@Model.MaChiTietPN @Html.Hidden("MaChiTietPN",Model.MaChiTietPN)</td>
+                            <td>@Model.MaPN</td>
+
+                            <td>@Html.DropDownList("MaSP")</td>
+                            <td><input type="number" min="0" value="@Model.DonGiaNhap" name="DonGiaNhap" /></td>
+                            <td><input type="number" min="0" value="@Model.SoLuongNhap" name="SoLuongNhap" /></td>
+                            @if (Model.DaXoa == false)
+                            {
+                                <td>Đã kích hoạt</td>
+                            }
+                            else
+                            {
+                                <td>Vô hiệu hóa</td>
+                            }
+                            <td>
+
+                                <button type="submit" class="btn btn-default">Cập nhật</button>
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+                }
+            </table>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+<!-- //inner_content_w3_agile_info-->
+<script type="text/javascript">
+    var dem = 0;
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa sản phẩm?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+</script>
+
+

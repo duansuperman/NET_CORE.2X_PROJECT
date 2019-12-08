@@ -1,0 +1,317 @@
+﻿@using WebSiteBanHang.Models;
+@model List<ItemGioHang>
+
+
+@if (Model == null || Model.Count() == 0)
+{
+    <h2>giỏ hàng rỗng</h2>
+    <script>
+        $("#TongTien").text("0 vnđ");
+        $("#simpleCart_quantity").text("0");
+    </script>
+}
+else
+{
+
+    <h2>My Shopping Bag (@Model.Sum(s => s.SoLuong))</h2>
+    <div class="col-md-6 cart-items">
+
+        @foreach (ItemGioHang item in Model)
+        {
+            <script>
+
+                    $(document).ready(function (c) {
+                        $('#@item.MaSP').on('click', function (c) {
+
+                           $.ajax({
+                                    type: 'POST',
+                                    data: { MaSP: @item.MaSP },
+                                    url: '@Url.Action("XoaItemGioHang","GioHang")',
+                                    success: function (ketqua) {
+
+                                        $('.check').html(ketqua);
+                                    }
+                                });
+                        });
+
+
+                    });
+            </script>
+            <div class="cart-header" id="abc">
+
+                <div class="close1" id="@item.MaSP"> </div>
+
+                <a class="edit1" href="@Url.Action("SuaGioHang","GioHang",new { @MaSP = item.MaSP })"> </a>
+                <div class="cart-sec simpleCart_shelfItem">
+                    <div class="cart-item cyc">
+                        <img src="@Url.Content("~/Content/HinhAnhSP/" + item.HinhAnh)" class="img-responsive" alt="" />
+                    </div>
+                    <div class="cart-item-info">
+                        <h3><a href="#">@item.TenSP</a></h3>
+                        <ul class="qty">
+                            @*<li><p>Size : 5</p></li>*@
+                            <li><p>Số lượng : @item.SoLuong</p></li>
+                        </ul>
+
+                        <div class="delivery">
+                            <p>Đơn giá :@item.DonGia.ToString("#,##") vnđ</p>
+                            <span>@item.ThanhTien.ToString("#,##") vnđ</span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-3 cart-total">
+        <a class="continue" href="@Url.Action("Index","Home")">Tiếp tục mua hàng</a>
+        <div class="price-details">
+            <h3>Thông tin hóa đơn</h3>
+            <span>Tổng tiền</span>
+            <span class="total1">@Model.Sum(s => s.ThanhTien).ToString("#,##") vnđ</span>
+            <span>Discount</span>
+            <span class="total1">---</span>
+            <span>Miễn phí ship tại TP.HCM</span>
+            <hr />
+            <span>Phí ship các tỉnh khác: 30.000 vnđ</span>
+
+            <div class="clearfix"></div>
+        </div>
+        <ul class="total_price">
+            <li class="last_price"> <h4>Tổng tiền</h4></li>
+            <li class="last_price"><span>@Model.Sum(s => s.ThanhTien).ToString("#,##") vnđ</span></li>
+            <li><span>( chưa cộng phí ship )</span></li>
+            <div class="clearfix"> </div>
+        </ul>
+
+
+        <div class="clearfix"></div>
+        <a class="order" href="#" id="btnDatHang">Đặt hàng</a>
+        @*<div class="total-item">
+                <h3>OPTIONS</h3>
+                <h4>COUPONS</h4>
+                <a class="cpns" href="#">Apply Coupons</a>
+                <p><a href="#">Log In</a> to use accounts - linked coupons</p>
+            </div>*@
+    </div>
+
+    <div class="clearfix"> </div>
+
+
+}
+<script>
+            $("#TongTien").text("@Model.Sum(s=>s.ThanhTien) vnđ");
+            $("#simpleCart_quantity").text("@Model.Sum(s=>s.SoLuong)");
+</script>
+
+<div id="popup-order">
+    <div class=" w3l-login-form">
+        <div style="clear:both;text-align:right;margin-bottom:0">
+            <span id="close-form-order" class="btn btn-danger">X</span>
+        </div>
+        <h3 style="color:red;text-align:center">Đặt hàng</h3>
+        @using (Ajax.BeginForm("DatHang", "Home", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ketqua", InsertionMode = InsertionMode.Replace }))
+        {
+
+            <div class=" w3l-form-group">
+                <label>Tài khoản:</label>
+                <div class="group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="form-control" placeholder="Họ tên" required="required" name="userName">
+                </div>
+            </div>
+            <div class=" w3l-form-group">
+                <label>Email:</label>
+                <div class="group">
+                    <i class="fas fa-envelope"></i>
+                    <input id="email" type="email" class="form-control" placeholder="Email" required="required" name="Email">
+                </div>
+            </div>
+            <div class=" w3l-form-group">
+                <label>Số điện thoại:</label>
+                <div class="group">
+                    <i class="fas fa-phone"></i>
+                    <input id="numberphone" type="number" class="form-control" placeholder="Số điện thoại" required="required" name="phoneNumber">
+                </div>
+            </div>
+            <div class=" w3l-form-group">
+                <label>Địa chỉ:</label>
+                <div class="group">
+                    <i class="fas fa-home"></i>
+                    <input style="width:100%" id="dress" type="text" class="form-control" placeholder="Địa chỉ" required="required" name="Dress">
+                </div>
+            </div>
+
+            <button type="submit" id="btnOrder">Tiến hành đặt hàng</button>
+        }
+
+    </div>
+</div>
+
+<div id="popup-order-tv">
+    <div class=" w3l-login-form">
+        <div style="clear:both;text-align:right;margin-bottom:0">
+            <span id="close-form-order-tv" class="btn btn-danger">X</span>
+        </div>
+        <div style="padding-top:10%">
+            @using (Ajax.BeginForm("DatHang", "Home", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ketqua", InsertionMode = InsertionMode.Replace }))
+            {
+
+
+                <button type="submit" id="btnOrder-tv">Tiến hành đặt hàng</button>
+            }
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+
+    #close-form-order {
+        color: white;
+    }
+
+    #popup-order {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0);
+        z-index: 3;
+        display: none;
+    }
+
+    #popup-order-tv {
+        position: absolute;
+        top: 10%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0);
+        z-index: 3;
+        display: none;
+    }
+</style>
+
+@{
+
+    ThanhVienTB tv = Session["TaiKhoan"] as ThanhVienTB;
+    int status = 0;
+    if (tv != null)
+    {
+        status = 1;
+    }
+}
+<script type="text/javascript">
+    var kt = @status;
+    $("#btnDatHang").click(function () {
+
+
+        if (kt) {
+            $("#popup-order-tv").fadeIn(500);
+
+        }
+        else {
+            $("#popup-order").fadeIn(500);
+        }
+    });
+
+    //Bắt sựu kiện ẩn form
+    $("#close-form-order").click(CloseForm);
+
+    //Định nghĩa ẩn form
+    function CloseForm() {
+        $("#popup-order").hide();
+    }
+    $("#close-form-order-tv").click(CloseFormTV);
+
+    //Định nghĩa ẩn form
+    function CloseFormTV() {
+        $("#popup-order-tv").hide();
+    }
+    $("#btnOrder").click(function () {
+
+        alert("Quý khách đã đặt hàng thành công ! Cảm ơn quý khách. Nhân viên tư vấn sẽ gọi lại xác nhận đơn hàng này");
+        $("#popup-order").hide();
+    });
+    $("#btnOrder-tv").click(function () {
+
+        alert("Quý khách đã đặt hàng thành công ! Cảm ơn quý khách. Nhân viên tư vấn sẽ gọi lại xác nhận đơn hàng này");
+        $("#popup-order").hide();
+    });
+
+
+</script>
+
+@section scripts {
+
+    <!--Script references. -->
+    <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
+    <!--Reference the SignalR library. -->
+
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <!--SignalR script to update the chat page and send messages.-->
+    <script>
+
+        $(function () {
+
+            var contentHtml = '';
+            var contenUrl = '@Request.RawUrl';
+
+            // Reference the auto-generated proxy for the hub.
+            var chat = $.connection.chatHub;
+            // Create a function that the hub can call back to display messages.
+            chat.client.addNewMessageToPage = function (name, message) {
+                // Add the message to the page.
+
+                $('#KQTimKiem').html(message);
+                window.location.href = name;
+
+            };
+            // Get the user name and store it to prepend to messages.
+            // $('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+
+
+                // Call the Send method on the hub.
+                if (kt) {
+
+                    for (var i = 0; i < listID.length; i++) {
+                        $(listID[i]).click(function () {
+                            listID.splice(i, 1);
+                            chat.server.send(contenUrl, $('#KQTimKiem').html());
+
+
+                        });
+
+                    }
+                    $('#XemGioHang').click(function () {
+                        chat.server.send(contenUrl, $('#KQTimKiem').html());
+                    });
+
+                }
+
+            });
+
+
+        });
+
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+
+
+    </script>
+}

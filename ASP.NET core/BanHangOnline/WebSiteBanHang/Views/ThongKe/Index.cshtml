@@ -1,0 +1,128 @@
+﻿@using WebSiteBanHang.Models;
+@model List<ThongKeDoanhThu>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+@{ 
+    List<int> list = new List<int>();
+    int Nam = DateTime.Now.Year;
+    for(int i = Nam; i >= 2000; i--)
+    {
+        list.Add(i);
+    }
+}
+@Html.Action("ThongKePartial", "ThongKe")
+
+    <div class="w3ls_agile_cylinder chart agile_info_shadow">
+        @using (Html.BeginForm())
+        {
+            @Html.DropDownList("Nam", new SelectList(list), new { @style = "height:35px" });
+            <button type="submit" class="btn btn-info">Thống kê</button>
+        }
+
+        <h3 class="w3_inner_tittle two"> Thống kê thu nhập trong năm @ViewBag.Nam (VNĐ)</h3>
+
+
+        <div id="chartdiv"></div>
+
+        <h3 class="w3_inner_tittle two" style="text-align:center"> Tổng thu hiện tại @Model.Sum(s => s.DoanhThu).ToString("#,##") VNĐ </h3>
+    </div>
+
+<script type="text/javascript" src="~/Content/Admin/js/jquery-2.1.4.min.js"></script>
+
+<!-- /amcharts -->
+<script src="~/Content/Admin/js/amcharts.js"></script>
+<script src="~/Content/Admin/js/serial.js"></script>
+<script src="~/Content/Admin/js/export.js"></script>
+<script src="~/Content/Admin/js/light.js"></script>
+
+<script>
+    
+    var chart = AmCharts.makeChart("chartdiv", {
+        "theme": "light",
+        "type": "serial",
+        "startDuration": 2,
+        "dataProvider": [{
+            "country": "Tháng 1",
+            "visits":@Model[0].DoanhThu ,
+            "color": "#FF0F00"
+        }, {
+            "country": "Tháng 2",
+            "visits": @Model[1].DoanhThu,
+            "color": "#FF6600"
+        }, {
+            "country": "Tháng 3",
+            "visits": @Model[2].DoanhThu,
+            "color": "#FF9E01"
+        }, {
+            "country": "Tháng 4",
+            "visits": @Model[2].DoanhThu,
+            "color": "#FCD202"
+        }, {
+            "country": "Tháng 5",
+            "visits": @Model[4].DoanhThu,
+            "color": "#F8FF01"
+        }, {
+            "country": "Tháng 6",
+            "visits": @Model[5].DoanhThu,
+            "color": "#B0DE09"
+        }, {
+            "country": "Tháng 7",
+            "visits": @Model[6].DoanhThu,
+            "color": "#04D215"
+        }, {
+            "country": "Tháng 8",
+            "visits": @Model[7].DoanhThu,
+            "color": "#0D8ECF"
+        }, {
+            "country": "Tháng 9",
+            "visits": @Model[8].DoanhThu,
+            "color": "#0D52D1"
+        }, {
+            "country": "Tháng 10",
+            "visits": @Model[9].DoanhThu,
+            "color": "#2A0CD0"
+        }, {
+            "country": "Tháng 11",
+            "visits": @Model[10].DoanhThu,
+            "color": "#8A0CCF"
+        }, {
+            "country": "Tháng 12",
+            "visits": @Model[11].DoanhThu,
+            "color": "#CD0D74"
+        }],
+        "valueAxes": [{
+            "position": "left",
+            "axisAlpha": 0,
+            "gridAlpha": 0
+        }],
+        "graphs": [{
+            "balloonText": "[[category]]: <b>[[value]]</b>",
+            "colorField": "color",
+            "fillAlphas": 0.85,
+            "lineAlpha": 0.1,
+            "type": "column",
+            "topRadius": 1,
+            "valueField": "visits"
+        }],
+        "depth3D": 40,
+        "angle": 30,
+        "chartCursor": {
+            "categoryBalloonEnabled": false,
+            "cursorAlpha": 0,
+            "zoomable": false
+        },
+        "categoryField": "country",
+        "categoryAxis": {
+            "gridPosition": "start",
+            "axisAlpha": 0,
+            "gridAlpha": 0
+
+        },
+        "export": {
+            "enabled": false
+        }
+
+    }, 0);
+</script>

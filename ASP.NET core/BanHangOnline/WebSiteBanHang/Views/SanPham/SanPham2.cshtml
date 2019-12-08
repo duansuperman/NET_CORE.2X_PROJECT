@@ -1,0 +1,21 @@
+﻿@using WebSiteBanHang.Models;
+@{ 
+    IEnumerable<SanPham> ListSP = (IEnumerable<SanPham>)ViewBag.ListSP;
+    IEnumerable<SanPham> ListSPNew = (IEnumerable<SanPham>)ViewBag.ListSPNew;
+}
+@{
+    ViewBag.Title = "SanPham2";
+    Layout = "~/Views/Layout/HomeLayout.cshtml";
+}
+
+<h2>SanPham2</h2>
+@*cách 1*@
+<div class="container">
+    @Html.Partial("SanPhamPartial", ListSP);
+
+    @Html.Partial("SanPhamPartialAll", ListSPNew);
+
+    @*cách 2*@
+    @*@Html.Action("SanPhamPartial");*@
+    
+</div>

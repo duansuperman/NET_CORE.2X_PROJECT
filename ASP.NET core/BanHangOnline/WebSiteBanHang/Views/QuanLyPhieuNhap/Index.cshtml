@@ -1,0 +1,154 @@
+﻿@using WebSiteBanHang.Models;
+@using X.PagedList;
+
+@model PagedList.IPagedList<PhieuNhap>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+@{
+    ThanhVienTB check = Session["TaiKhoan"] as ThanhVienTB;
+
+}
+<!-- /inner_content_w3_agile_info-->
+<!-- breadcrumbs -->
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Thống kê phiếu nhập</li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">Thống kê phiếu nhập</h2>
+    <!-- tables -->
+
+    <div class="agile-tables">
+        <div class="w3l-table-info agile_info_shadow">
+            <h3 class="w3_inner_tittle two"><a href="@Url.Action("ThemPhieuNhap","QuanLyPhieuNhap")"><u>Thêm phiếu nhập mới</u></a></h3>
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>Mã phếu nhập</th>
+                        <th>Nhà cung cấp</th>
+                        <th>Ngày nhập</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @using (Html.BeginForm("Sua", "QuanLyPhieuNhap"))
+                    {
+                        foreach (var item in Model)
+                        {
+                            string classDrop = "Drop" + item.MaPN;
+                            string classTd = "Td" + item.MaPN;
+                            string idBtn = "Btn" + item.MaPN;
+                            string classSpan = "Span" + item.MaPN;
+                            string idBtnHuy = "BtnHuy" + item.MaPN;
+                            <tr>
+                                @Html.Hidden("Name", item.MaPN, new { @class = classTd, @value = item.MaPN })
+                                <td>@item.MaPN</td>
+                                <td>
+                                    <span class="col-sm-6 @classSpan">@Html.DisplayFor(model => item.NhaCungCap.TenNCC)</span> <span class="col-sm-6">@Html.DropDownList("MaNCCA", null, new { @class = classDrop, @style = "display:none" })</span> <button type="submit" class="btn btn-info btn-flat btn-pri btn-sm col-sm-3" id="@idBtn">Sửa</button> <button type="button" class="btn btn-info btn-flat btn-pri btn-sm col-sm-2" id="@idBtnHuy" style="background-color:red; display:none">Hủy</button>
+                                </td>
+                                <td>
+                                    @item.NgayNhap
+                                    <script type="text/javascript">
+
+                                    $("#@idBtn").click(function () {
+
+                                        if (dem == 1) {
+
+                                            dem = 0;
+                                        }
+                                        else {
+
+                                            $(".@classSpan").hide();
+                                            $(".@classDrop").show();
+                                            $(".@classDrop").attr("name", "MaNCC");
+                                            $(".@classTd").attr("name", "MaPN");
+                                            $("#@idBtnHuy").show();
+                                            $("#@idBtn").text("Cập nhật");
+                                            dem = dem + 1;
+                                            return false;
+                                        }
+
+                                    });
+                                    $("#@idBtnHuy").click(function () {
+                                        $("#@idBtnHuy").hide();
+                                         $(".@classSpan").show();
+                                        $(".@classDrop").hide();
+                                        $("#@idBtn").text("Sửa");
+                                        dem = 0;
+                                    });
+
+                                    </script>
+                                </td>
+                                @if (item.DaXoa == false)
+                                {
+                                    <td>Đã kích hoạt</td>
+                                }
+                                else
+                                {
+                                    <td>Vô hiệu hóa</td>
+                                }
+                            <td>
+                                @if (check.MaLoaiTV == 1)
+                                {
+                                    <a title="Xoá vĩnh viễn" onclick="Xoa(event)" href="@Url.Action("Xoa","QuanLyPhieuNhap",new { @MaPN=item.MaPN})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-remove" style="background-color:orangered">
+
+                                    </a>
+                                }
+                                @if (item.DaXoa == false)
+                                {
+                                    <a title="Vô hiệu hóa" href="@Url.Action("VoHieuHoa", "QuanLyPhieuNhap", new { @MaPN = item.MaPN })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-unlock">
+
+                                    </a>
+                                    <a title="Xem chi tiết phiếu nhập" href="@Url.Action("XemChiTietPhieuNhap", "QuanLyPhieuNhap", new { @MaPN = item.MaPN })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-book">
+
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a title="Kích hoạt" href="@Url.Action("kichHoat", "QuanLyPhieuNhap", new { @MaPN = item.MaPN })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-lock">
+
+                                    </a>
+                                }
+
+                            </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+    <div class="pagination col-md-9" style="float:right">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!-- //inner_content_w3_agile_info-->
+<script type="text/javascript">
+    var dem = 0;
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa sản phẩm?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+</script>

@@ -1,0 +1,47 @@
+create EF core from database exist 
+command : 
+	Scaffold-DbContext "Server=.\;Database=QuanLySinhVien;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Update models :
+	Scaffold-DbContext "Server=.\;Database=QLSinhVien;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+	
+	var connection = @"Server=.\;Database=WebApp;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<WebAppContext>(options => options.UseSqlServer(connection));
+			
+Bài tập lab: https://drive.google.com/drive/folders/1DvQijPnIV7KSdzumbX1Y5hvAN_pDwgiK?fbclid=IwAR267FrjztirlDVxYjcveYwTLh5O92thDAC6cFaSzf8N_0xwkKA76wsePpM
+
+Link bài lab: https://github.com/hcmue/NETCourse1920?fbclid=IwAR1C3z3l39k7SuBSXUhX0cVeY-CeujgUsTL_kVox5hoR2uPa7fT0I0a4SdY
+
+Xử lý ajax : http://learningprogramming.net/net/asp-net-core-mvc/ajax-in-asp-net-core-mvc/
+
+Add validation to an ASP.NET Core MVC app :
+	[StringLength(60, MinimumLength = 3)] // Quy định độ dài <=60 >=3
+    [Required]			//Không được để trống
+    public string Title { get; set; } 
+
+    [Display(Name = "Release Date")] //Quy định hiển thị
+    [DataType(DataType.Date)] //Định nghĩa lại kiểu dữ liệu
+    public DateTime ReleaseDate { get; set; }
+
+    [Range(1, 100)] //Quy định giá trị phải năm trong khoảng >=1 <=100
+    [DataType(DataType.Currency)]
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal Price { get; set; }
+
+    [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
+    [Required]
+    [StringLength(30)]
+    public string Genre { get; set; }
+
+    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
+    [StringLength(5)]
+    [Required]
+    public string Rating { get; set; }
+	
+[HttpPost]
+[ValidateAntiForgeryToken]
+
+pagedlist : https://github.com/dncuug/X.
+
+Handle Slider-Range 2 point: https://stackoverflow.com/questions/10775341/jquery-range-slider-with-two-handlers-reading-min-and-max-values-values
+
+ViewComponent: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components?view=aspnetcore-3.0

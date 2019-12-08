@@ -1,0 +1,125 @@
+﻿@using WebSiteBanHang.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<ThanhVienTB>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Quản lý thành viên</li>
+        </ul>
+    </div>
+</div>
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">Quản lý thành viên</h2>
+    <!-- tables -->
+
+    <div class="agile-tables">
+
+        <div class="w3l-table-info agile_info_shadow">
+            <h3 class="w3_inner_tittle two">Tổng số: @Model.Count()</h3>
+
+            <table id="table-no-resize">
+                <thead>
+                    <tr>
+                        <th>Mã thành viên</th>
+                        <th>Tài khoản</th>
+                        <th>Họ tên</th>
+                        <th>Địa chỉ</th>
+                        <th>Email</th>
+                        <th>Số điện thoại </th>
+                        <th>Loại thành viên</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@item.MaThanhVien</td>
+                        <td>@item.TaiKhoan</td>
+                        <td>@item.HoTen</td>
+                        <td>@item.DiaChi</td>
+                        <td>@item.Email</td>
+                        <td>@item.SoDienThoai</td>
+                        <td>@Html.DisplayFor(model => item.LoaiThanhVien.TenLoai)</td>
+                        @if (item.DaXoa == true)
+                        {
+                            <td>Vô hiệu hóa</td>
+                        }
+                        else
+                        {
+                            <td>Đã kích hoạt</td>
+                        }
+
+                    <td>
+                        <a title="Xóa" onclick="Xoa(event)" href="@Url.Action("Xoa",new { @MaThanhVien = item.MaThanhVien,@key="Ad"})" id="@item.MaThanhVien" class="btn btn-info btn-flat btn-pri btn-sm fa fa-remove" style="background-color:orangered">
+
+                        </a>
+                        @if (item.DaXoa == true)
+                        {
+                            <a title="Kích hoạt tài khoản" href="@Url.Action("KichHoat",new { @MaThanhVien = item.MaThanhVien,@key="Ad"})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-lock">
+
+                            </a>
+                        }
+                        else
+                        {
+                            <a title="Vô hiệu hóa tài khoản" href="@Url.Action("VoHieuHoa",new { @MaThanhVien = item.MaThanhVien,@key="Ad"})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-unlock">
+
+                            </a>
+                        }
+
+                        @if (item.MaLoaiTV == 3)
+                        {
+                            <a title="Chuyển về tài khoản thường" href="@Url.Action("ChuyenLoaiThanhVien",new { @MaThanhVien = item.MaThanhVien})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-male">
+
+                            </a>
+                           
+                        }
+                        else if (item.MaLoaiTV == 4)
+                        {
+                            <a title="Nâng cấp tài khoản VIP" href="@Url.Action("ChuyenLoaiThanhVien",new { @MaThanhVien = item.MaThanhVien})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-male">
+
+                            </a>
+                            
+                        }
+                        
+
+                    </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+    <div class="pagination col-md-9" style="float:right">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+    <div class="clearfix"></div>
+
+    <!-- //tables -->
+    <!-- /social_media-->
+    <!-- //social_media-->
+</div>
+<script type="text/javascript">
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa thành viên?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+</script>
+
+

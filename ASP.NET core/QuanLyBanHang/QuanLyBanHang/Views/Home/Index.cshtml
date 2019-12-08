@@ -1,0 +1,18 @@
+﻿@using QuanLyBanHang.Models
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/HomeLayout.cshtml";
+}
+
+@{
+    IEnumerable<SanPham> listDTM = ViewBag.ListDTM as IEnumerable<SanPham>;
+    IEnumerable<SanPham> listLTM = (IEnumerable<SanPham>)ViewBag.ListLTM;
+    IEnumerable<SanPham> listMTM = ViewBag.ListMTM as IEnumerable<SanPham>;
+}
+<div class="container">
+    @Html.PartialAsync("~/Views/SanPham/SanphamStyle1Partial.cshtml", listDTM)
+    @Html.PartialAsync("~/Views/SanPham/SanPhamStyle2Partial.cshtml", listLTM)
+    @Html.PartialAsync("~/Views/SanPham/SanphamStyle1Partial.cshtml", listMTM)
+
+</div>

@@ -1,0 +1,12 @@
+https://github.com/paypal/PayPal-NET-SDK/tree/2.0-beta?fbclid=IwAR3RfqxcZW-Nd64Zlbi_eUk1CZkS1MaN-GGvVPSpDIZIM-CnXnSLTZ2f-zs
+https://github.com/hcmue/eShop/blob/master/MyShop/MyShopK6/Controllers/PaypalController.cs?fbclid=IwAR0Q2vTAAx_79WzQu2kDOd3DIYC-T89Xo6KqEn3GstRdYxtJisS8a-8cujY
+Maatj khaaur ddawng kys paypal : duan@9898
+Client ID : AeSrApvlBiKT1oAKF9-SE2FHhjNzXqQrA7HQSobHhQka55DymFKNPfoFBNUoDfeVzw_yNxS5K6F7sTgo
+Client Secret key : EAXBB2NyRN6b0aopaB2r2S7IMCrgxzSRuFQcMRuxqBLwsEO6hVs67CktHRIHOfHZ0OEF-BbKUXQCJOwD
+
+integration facebook in to website :
+	javascript :
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v4.0&appId=541019506440618&autoLogAppEvents=1"></script>
+	publigin:
+	<div class="fb-comments" data-href="https://duansuperman.github.io/" data-width="567" data-numposts="5"></div>

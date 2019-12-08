@@ -1,0 +1,13 @@
+﻿@using SaveAndReadFile.Models;
+@model List<FileDetail>;
+@{
+    ViewData["Title"] = "ListModel";
+}
+
+<h2>ListModel</h2>
+@foreach (FileDetail item in Model)
+{
+    <li>
+        <a asp-action="Dowload" asp-route-filename="@item.Name">@item.Name</a>
+    </li>
+}

@@ -1,0 +1,161 @@
+﻿@using WebSiteBanHang.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<ChiTietDonDatHang>
+@{
+    ViewBag.Title = "ChiTietDH";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+@{
+    QuanLyBanHangEntities db = new QuanLyBanHangEntities();
+    ThanhVienTB check = Session["TaiKhoan"] as ThanhVienTB;
+
+    int MaDDH = int.Parse(ViewBag.MaDDH.ToString());
+    double TongTien = (double)Model.Sum(s => s.DonGia * s.SoLuong);
+    DonDatHang ddh = db.DonDatHangs.SingleOrDefault(s => s.MaDDH == MaDDH);
+    int KM = (int)ddh.UuDai;
+    double TongTienKM = (double)(1 - KM*1.0 / 100) * TongTien;
+}
+<!-- /inner_content_w3_agile_info-->
+<!-- breadcrumbs -->
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Đơn đặt hàng</li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle col-sm-10">Đơn đặt hàng</h2>
+    <a href="@Url.Action("XuatHDDH", "QuanLyDonHang", new { @MaDDH=MaDDH })" class="btn btn-success col-sm-2">Xem hóa đơn</a>
+    <!-- tables -->
+
+    <div class="agile-tables">
+        <div class="w3l-table-info agile_info_shadow">
+            
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>Mã chi tiết DDH</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Hình ảnh</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá(VNĐ)</th>
+                        <th>Thành tiền(VNĐ)</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        double DG = (double)item.DonGia;
+                        double Tong = (double)item.SoLuong * (double)item.DonGia;
+                        <tr>
+
+                            <td>@item.MaChiTietDDH</td>
+                            <td>@Html.DisplayFor(model => item.SanPham.TenSP)</td>
+                            <td><img src="~/Content/HinhAnhSP/@item.SanPham.HinhAnh" style="width:100px;height:100px" /></td>
+                            <td>@item.SoLuong</td>
+                            <td>@DG.ToString("#,##")</td>
+                            <td>@Tong.ToString("#,##")</td>
+                            @if (item.DaXoa == false)
+                            {
+                                <td>Kích hoạt</td>
+                            }
+                            else
+                            {
+                                <td>Đã vô hiệu hóa</td>
+                            }
+                            <td>
+                                @*@if (check.MaLoaiTV == 1)
+                                    {
+                                        <a title="Xoá vĩnh viễn" onclick="Xoa(event)" href="@Url.Action("XoaCTDH","QuanLyDonHang",new { @MaCTDH=item.MaChiTietDDH, @MaDDH=item.MaDDH})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-remove" style="background-color:orangered">
+
+                                        </a>
+                                    }*@
+                                @if (item.DaXoa == false)
+                                {
+                                    <a title="Vô hiệu hóa" href="@Url.Action("VoHieuHoaCTDH", "QuanLyDonHang", new { @MaCTDH = item.MaChiTietDDH, @MaDDH=item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-unlock">
+
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a title="Kích hoạt" href="@Url.Action("KichHoatCTDH", "QuanLyDonHang", new { @MaCTDH = item.MaChiTietDDH, @MaDDH=item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-lock">
+
+                                    </a>
+                                }
+                                
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Tổng tiền: @TongTien.ToString("#,##") VNĐ</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Khuyến Mãi: @KM % </th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Tổng tiền thanh toán(Đã KM): @TongTienKM.ToString("#,##") VNĐ</th>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+    <div class="pagination col-md-9" style="float:right">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("ChiTietDH", new { page = page, @MaDDH = MaDDH }))
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!-- //inner_content_w3_agile_info-->
+<script type="text/javascript">
+    var dem = 0;
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa đơn hàng?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+</script>
+
+

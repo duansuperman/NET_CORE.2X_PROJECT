@@ -1,0 +1,153 @@
+﻿@using WebSiteBanHang.Models;
+@model ItemGioHang 
+@{
+    ViewBag.Title = "SuaGioHang";
+    Layout = "~/Views/Layout/ProductLayout.cshtml";
+}
+@{ 
+    List<ItemGioHang> listGH = ViewBag.ListGH as List<ItemGioHang>;
+}
+
+    <div class="check">
+        <h2>My Shopping Bag (@listGH.Sum(s => s.SoLuong))</h2>
+        <div class="col-md-6 cart-items">
+
+            @foreach (ItemGioHang item in listGH)
+            {
+                if (item == Model)
+                {
+                    //using (Html.BeginForm("CapNhatGioHang", "GioHang"))
+                    //{
+                        <script>
+                            $(document).ready(function (c) {
+                                
+                                $('.update1').on('click', function (c) {
+                                    var sl = $("#SoLuong").val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        data: { MaSP: @item.MaSP, Sl: sl },
+                                        url: '@Url.Action("CapNhatGioHang","GioHang")',
+                                        success: function (ketqua) {
+
+                                            $('.check').html(ketqua);
+                                        }
+                                    });    
+                                        
+                                });
+
+                                
+                            });
+
+                         
+                        </script>
+                        <div class="cart-header">
+                            <a class="update1"  > </a>
+                            <div class="cart-sec simpleCart_shelfItem">
+                                <div class="cart-item cyc">
+                                    <img src="@Url.Content("~/Content/HinhAnhSP/" + item.HinhAnh)" class="img-responsive" alt="" />
+                                </div>
+                                <div class="cart-item-info">
+                                    <h3><a href="#">@item.TenSP</a></h3>
+                                    <ul class="qty">
+                                        @*<li><p>Size : 5</p></li>*@
+                                        <li><p>Cập nhật số lượng giỏ hàng @Html.TextBoxFor(t => t.SoLuong, new { @Value = item.SoLuong, type = "number", min = "1", step = "1", style = "width:25%;text-align:center" })</p></li>
+                                    </ul>
+
+                                    <div class="delivery">
+                                        <p>Đơn giá :@item.DonGia.ToString("#,##") vnđ</p>
+                                        <span>@item.ThanhTien.ToString("#,##") vnđ</span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                @*<button class="continue" type="submit"> cập nhật</button>*@
+                            </div>
+                            
+                        </div>
+                    //}
+
+                }
+                else
+                {
+                    <script>
+                        $(document).ready(function (c) {
+                            $('#@item.MaSP').on('click', function (c) {
+                                $.ajax({
+                                    type: 'POST',
+                                    data: { MaSP: @item.MaSP, MaEdit: @Model.MaSP  },
+                                    url: '@Url.Action("XoaItemGioHang","GioHang")',
+                                    success: function (ketqua) {
+
+                                        $('.check').html(ketqua);
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    <div class="cart-header">
+
+                        <div class="close1" id="@item.MaSP"> </div>
+
+                        <a class="edit1" href="@Url.Action("SuaGioHang","GioHang",new { @MaSP = item.MaSP})"> </a>
+                        <div class="cart-sec simpleCart_shelfItem">
+                            <div class="cart-item cyc">
+                                <img src="@Url.Content("~/Content/HinhAnhSP/" + item.HinhAnh)" class="img-responsive" alt="" />
+                            </div>
+                            <div class="cart-item-info">
+                                <h3><a href="#">@item.TenSP</a></h3>
+                                <ul class="qty">
+                                    @*<li><p>Size : 5</p></li>*@
+                                    <li><p>Số lượng : @item.SoLuong</p></li>
+                                </ul>
+
+                                <div class="delivery">
+                                    @Html.Hidden("MaSP", item.MaSP)
+                                    <p>Đơn giá :@item.DonGia.ToString("#,##") vnđ</p>
+                                    <span>@item.ThanhTien.ToString("#,##") vnđ</span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="col-md-3 cart-total">
+            <a class="continue" href="@Url.Action("Index","Home")">Tiếp tục mua hàng</a>
+            <div class="price-details">
+                <h3>Thông tin hóa đơn</h3>
+                <span>Tổng tiền</span>
+                <span class="total1">@listGH.Sum(s => s.ThanhTien).ToString("#,##") vnđ</span>
+                <span>Discount</span>
+                <span class="total1">---</span>
+                <span>Miễn phí ship tại TP.HCM</span>
+                <hr />
+                <span>Phí ship các tỉnh khác: 30.000 vnđ</span>
+
+                <div class="clearfix"></div>
+            </div>
+            <ul class="total_price">
+                <li class="last_price"> <h4>Tổng tiền</h4></li>
+                <li class="last_price"><span>@listGH.Sum(s => s.ThanhTien).ToString("#,##") vnđ</span></li>
+                <li><span>( chưa cộng phí ship )</span></li>
+                <div class="clearfix"> </div>
+            </ul>
+
+
+            <div class="clearfix"></div>
+            @*<a class="order" href="#">Place Order</a>
+            <div class="total-item">
+                <h3>OPTIONS</h3>
+                <h4>COUPONS</h4>
+                <a class="cpns" href="#">Apply Coupons</a>
+                <p><a href="#">Log In</a> to use accounts - linked coupons</p>
+            </div>*@
+        </div>
+
+        <div class="clearfix"> </div>
+    </div>
+@Html.TextBoxFor(t=>t.TenSP, new { @Value="1" ,type = "number", min = "0", step = "1"})
+@Html.TextBox("abc", new { @Value="0"})

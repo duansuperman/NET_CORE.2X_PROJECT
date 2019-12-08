@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "ThemMoi";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+    <script src="~/Content/tinymce_5.0.8/tinymce/js/tinymce/tinymce.min.js"></script>
+<script>tinymce.init({selector:'.textarea'});</script>
+
+<!-- /inner_content_w3_agile_info-->
+<!-- breadcrumbs -->
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+            <li>Sản phẩm <span>«</span></li>
+            <li>Thêm mới</li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">@ViewBag.upload</h2>
+
+    <!--/forms-->
+    <div class="forms-main_agileits">
+
+
+        <!--/forms-inner-->
+        <div class="forms-inner">
+            <!--/set-1-->
+            <div class="set-1_w3ls">
+
+                <div class="col-md-12 button_set_one agile_info_shadow graph-form">
+                    <h3 class="w3_inner_tittle two">Nhập thông tin sản phẩm </h3>
+                    <div class="grid-1">
+                        <div class="form-body">
+
+                            @using (Html.BeginForm("ThemMoi", "QuanLySanPham", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "form-horizontal" }))
+                            {
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Tên sản phẩm</label>
+                                    <div class="col-sm-9">
+                                        <input required type="text" HinhAnh1 class="form-control" name="TenSP" id="inputEmail3" placeholder="Nhập tên sản phẩm">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Đơn giá</label>
+                                    <div class="col-sm-9">
+                                        <input required type="number" name="DonGia" class="form-control" id="inputEmail3" placeholder="Nhập đơn giá">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Cấu hình</label>
+                                    <div class="col-sm-9">
+                                        <input  type="text" name="CauHinh" class="form-control textarea" id="inputEmail3" placeholder="Nhập cấu hình">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label ">Mô tả</label>
+                                    <div class="col-sm-9">
+                                        <input  type="text" name="MoTa" class="form-control textarea" id="inputEmail3" placeholder="Nhập mô tả">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Hình ảnh</label>
+                                    <div class="col-sm-9">
+                                        <input required type="file" name="HinhAnh" class="form-control" id="inputEmail3" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Số lượng tồn</label>
+                                    <div class="col-sm-9">
+                                        <input required type="number" min="0" value="0" name="SoLuongTon" class="form-control" id="inputEmail3" placeholder="Nhập số lượng tồn">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Nhà cung cấp</label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownList("MaNCC", null, new { @class = "form-control", @style = "height:50px" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Nhà sản xuất</label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownList("MaNSX", null, new { @class = "form-control", @style = "height:50px" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Loại sản phẩm</label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownList("MaLoaiSP", null, new { @class = "form-control", @style = "height:50px" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Hình ảnh 1</label>
+                                    <div class="col-sm-9">
+                                        <input required type="file" name="HinhAnh1" class="form-control" id="inputEmail3" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Hình ảnh 2</label>
+                                    <div class="col-sm-9">
+                                        <input required type="file" name="HinhAnh2" class="form-control" id="inputEmail3" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Hình ảnh 3</label>
+                                    <div class="col-sm-9">
+                                        <input required type="file" name="HinhAnh3" class="form-control" id="inputEmail3" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Hình ảnh 4</label>
+                                    <div class="col-sm-9">
+                                        <input required type="file" name="HinhAnh4" class="form-control" id="inputEmail3" placeholder="Email">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-offset-2">
+                                    <button  type="submit" class="btn btn-default">Nhập vào</button>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="clearfix"> </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+

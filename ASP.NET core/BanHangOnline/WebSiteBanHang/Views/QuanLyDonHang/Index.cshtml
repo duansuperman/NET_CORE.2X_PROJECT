@@ -1,0 +1,206 @@
+﻿@using WebSiteBanHang.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<DonDatHang>
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+@{
+    QuanLyBanHangEntities db = new QuanLyBanHangEntities();
+    ThanhVienTB check = Session["TaiKhoan"] as ThanhVienTB;
+    int checkmail = 0;
+    if (Session["SendMail"] != null)
+    {
+        string t = Session["SendMail"] as string;
+        checkmail = int.Parse(t);
+        Session["SendMail"] = null;
+    }
+    int maddh = 0;
+    if (Session["MaDDH"] != null)
+    {
+        string t = Session["MaDDH"] as string;
+        maddh = int.Parse(t);
+        Session["MaDDH"] = null;
+    }
+}
+<!-- /inner_content_w3_agile_info-->
+<!-- breadcrumbs -->
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Đơn đặt hàng</li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">Đơn đặt hàng</h2>
+    <!-- tables -->
+
+    <div class="agile-tables">
+        <div class="w3l-table-info agile_info_shadow">
+            <h3 class="w3_inner_tittle two">Thống kê</h3>
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>Mã DDH</th>
+                        <th>Tên khách hàng</th>
+                        <th>Loại khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Trình trạng giao</th>
+                        <th>Ngày giao</th>
+
+                        <th>Đã thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Giá trị DH</th>
+                        <th>KM(%)</th>
+                        <th>Tổng tiền (VNĐ)</th>
+                        <th>Thao tác</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+
+                        var kh = db.KhachHangs.SingleOrDefault(s => s.MaKH == item.MaKH);
+                        var tv = db.ThanhVienTBs.SingleOrDefault(s => s.MaThanhVien == kh.MaThanhVien);
+                        int GiaTri = (int)db.ChiTietDonDatHangs.Where(w => w.MaDDH == item.MaDDH).Sum(s => s.SoLuong * s.DonGia);
+
+                        double TongTien = (double)(1 - item.UuDai * 1.0 / 100) * GiaTri;
+
+                        <tr>
+
+                            <td>@item.MaDDH</td>
+                            <td>@kh.TenKH
+                                <br />sđt: @kh.SoDienThoai
+                            </td>
+
+                            @if (tv == null)
+                            {
+                                <td>Vãng lai</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(model => tv.LoaiThanhVien.TenLoai)</td>
+                            }
+                            <td>@item.NgayDat</td>
+                            @if (item.TinhTrangGiaoHang == false)
+                            {
+                                <td>Chưa giao</td>
+                            }
+                            else
+                            {
+                                <td>Đã giao</td>
+                            }
+                            <td>@item.NgayGiao</td>
+                            @if (item.DaThanhToan == false)
+                            {
+                                <td>
+                                    <p>Chưa thanh toán</p>
+                                    <a href="@Url.Action("ThanhToanDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })"><u>Kích hoạt thanh toán </u></a>
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>
+                                    <p>Đã thanh toán</p>
+                                    <a href="@Url.Action("HuyThanhToanDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })"><u>Hủy kích hoạt thanh toán</u></a>
+                                </td>
+                            }
+                            @if (item.DaHuy == false)
+                            {
+                                <td>Kích hoạt</td>
+                            }
+                            else
+                            {
+                                <td>Vô hiệu hóa</td>
+                            }
+                            <td>@GiaTri.ToString("#,##")</td>
+                            <td>@item.UuDai</td>
+                            <td>@TongTien.ToString("#,##")</td>
+                            <td>
+                                @if (check.MaLoaiTV == 1)
+                                {
+                                    <a title="Xoá vĩnh viễn" onclick="Xoa(event)" href="@Url.Action("XoaDH","QuanLyDonHang",new { @MaDDH=item.MaDDH})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-remove" style="background-color:orangered">
+
+                                    </a>
+                                }
+                                @if (item.DaHuy == false)
+                                {
+                                    <a title="Vô hiệu hóa" href="@Url.Action("VoHieuHoaDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-unlock">
+
+                                    </a>
+                                    if (item.TinhTrangGiaoHang == false)
+                                    {
+                                        <a title="Duyệt đơn hàng"  href="@Url.Action("DuyetDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-check-circle-o" style="background-color:gold">
+
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a title="Hủy duyệt đơn hàng" href="@Url.Action("HuyDuyetDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-check-circle-o" style="background-color:lawngreen">
+
+                                        </a>
+                                    }
+                                    <a title="Xem chi tiết DH " href="@Url.Action("ChiTietDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-book">
+
+                                </a>
+                                }
+                                else
+                                {
+                                    <a title="Kích hoạt" href="@Url.Action("KichHoatDH", "QuanLyDonHang", new { @MaDDH = item.MaDDH })" class="btn btn-info btn-flat btn-pri btn-sm fa fa-lock">
+
+                                    </a>
+                                }
+                                
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+    <div class="pagination col-md-9" style="float:right">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!-- //inner_content_w3_agile_info-->
+<script type="text/javascript">
+    var dem = 0;
+    var ktmail = @checkmail;
+    
+    var thongbao = 'Mã đơn hàng: '+@maddh;
+    if (ktmail == 1) {
+        alert(thongbao + ' gửi mail đặt hàng thành công')
+    }
+    if (ktmail == -1) {
+        alert(thongbao + ' gửi mail đặt hàng không thành công')
+    }
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa sản phẩm?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+    
+</script>
+

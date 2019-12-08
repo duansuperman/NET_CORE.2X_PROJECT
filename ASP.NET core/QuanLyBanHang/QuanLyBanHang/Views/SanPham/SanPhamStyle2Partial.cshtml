@@ -1,0 +1,65 @@
+﻿@using QuanLyBanHang.Models;
+@model IEnumerable<SanPham>
+@{ 
+    List<SanPham> list = Model.ToList();
+
+}
+
+@*Có thể dùng Model.ElementAt(vitri).HinhAnh mà không cần chuyển sang list*@
+
+<div class="content-top-bottom">
+    <h2>@list[0].MaLoaiSpNavigation.TenLoai mới nhất</h2>
+    <div class="col-md-6 men">
+        <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=list[0].MaSp})" class="b-link-stripe b-animate-go  thickbox">
+            <img style="height:350px" class="img-responsive" src="@Url.Content("~/Content/HinhAnhSP/"+ list[0].HinhAnh)" alt="">
+            <div class="b-wrapper">
+                <h3 class="b-animate b-from-top top-in   b-delay03 " style="text-align: left;font-size:15pt;">
+                    @Html.Raw(list[0].CauHinh)
+                    <span style="text-align:center;font-size:25pt">@list[0].DonGia.Value.ToString("#,##") VNĐ</span>
+                </h3>
+            </div>
+        </a>
+
+
+    </div>
+    <div class="col-md-6">
+        <div class="col-md1 ">
+            <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=list[1].MaSp})" class="b-link-stripe b-animate-go  thickbox">
+                <img style="height:150px" class="img-responsive" src="@Url.Content("~/Content/HinhAnhSP/"+list[1].HinhAnh)" alt="">
+                <div class="b-wrapper">
+                    <h3 style="text-align: left;font-size:15pt" class="b-animate b-from-top top-in1   b-delay03 ">
+                        @Html.Raw(list[1].CauHinh)
+
+                    </h3>
+                </div>
+            </a>
+
+        </div>
+        <div class="col-md2">
+            <div class="col-md-6 men1">
+                <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=list[2].MaSp})" class="b-link-stripe b-animate-go  thickbox">
+                    <img  style="height:150px" class="img-responsive" src="@Url.Content("~/Content/HinhAnhSP/"+list[2].HinhAnh)" alt="">
+                    <div class="b-wrapper">
+                        <h3  class="b-animate b-from-top top-in2   b-delay03 ">
+                           @Html.Raw(list[2].CauHinh)
+                        </h3>
+                    </div>
+                </a>
+
+            </div>
+            <div class="col-md-6 men2">
+                <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=list[3].MaSp})" class="b-link-stripe b-animate-go  thickbox">
+                    <img style="height:150px" class="img-responsive" src="@Url.Content("~/Content/HinhAnhSP/"+list[3].HinhAnh)" alt="">
+                    <div class="b-wrapper">
+                        <h3    class="b-animate b-from-top top-in2   b-delay03 ">
+                            @Html.Raw(list[3].CauHinh)
+                        </h3>
+                    </div>
+                </a>
+
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>

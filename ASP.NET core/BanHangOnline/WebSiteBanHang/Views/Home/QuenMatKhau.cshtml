@@ -1,0 +1,9 @@
+﻿
+@using (Html.BeginForm("QuenMatKhau", "Home"))
+{
+    <p>Qúy khách nhập địa chỉ email lúc đăng ký để lấy lại tài khoản</p>
+    <p>Nếu tài khoản không còn hoạt động thì hãy liên hệ theo SĐT: 123456</p>
+    @Html.TextBox("Email")
+    <input type="submit" value="Chuyển tiếp" />
+    
+}

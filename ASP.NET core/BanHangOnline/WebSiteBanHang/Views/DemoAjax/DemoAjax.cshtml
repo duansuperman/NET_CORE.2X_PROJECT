@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "DemoAjax";
+    Layout = "~/Views/Layout/HomeLayout.cshtml";
+}
+
+<h2>DemoAjax</h2>
+
+@*Load Ajax theo cach dung Ajax.ActionLink*@
+@Ajax.ActionLink("link test", "LoadAjaxActionLink", new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "ketqua", InsertionMode = InsertionMode.InsertAfter, LoadingElementId = "Loading" })
+
+@*Load Ajax theo cach dung Ajax.Beginform*@
+@using (Ajax.BeginForm("LoadAjaxBeginForm", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ketqua", InsertionMode = InsertionMode.Replace, LoadingElementId = "Loading" }))
+{
+    @Html.TextBox("txt1")
+    <input type="submit" value="Submit" />
+}
+
+<input id="button" type="button" value="Submit" />
+<input id="ip1" />
+<input id="ip2" />
+@*Load Ajax theo cach dung Jquery*@
+<script>
+    $("#button").click(function () {
+        $('#Loading').show();
+        var ip1 = $("#ip1").val();
+        var ip2 = $("#ip2").val();
+        $.ajax({
+            type: 'GET',
+            data: { a: ip1, b: ip2 },
+            url: 'LoadAjaxJquery',
+            success: function (ketqua) {
+                $('#Loading').hide();
+                $('#ketqua').html(ketqua);
+            }
+        })
+    })
+</script>
+
+@*Load PartialView Ajax*@
+@Ajax.ActionLink("link test", "SanPhamPartial", new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "ketqua", InsertionMode = InsertionMode.InsertAfter, LoadingElementId = "Loading" })
+
+
+<div id="Loading" style="display:none;">
+    <img src="~/Content/images/giphy.gif" />
+</div>
+
+<div id="ketqua" style="height:500px">
+    Đây là kết quả
+</div>

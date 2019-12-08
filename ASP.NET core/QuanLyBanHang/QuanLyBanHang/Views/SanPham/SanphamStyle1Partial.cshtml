@@ -1,0 +1,28 @@
+﻿@using QuanLyBanHang.Models
+@model IEnumerable<SanPham>
+<div class="content-top">
+    <h1>@Html.DisplayFor(model=>Model.First().MaLoaiSpNavigation.TenLoai) MỚI NHẤT</h1>
+    <div class="grid-in">
+        @foreach(var item in Model.Take(3)){
+            <div class="col-md-4 grid-top">
+                <a href="@Url.Action("ChiTietSanPham","SanPham",new { id=item.MaSp})" class="b-link-stripe b-animate-go  thickbox">
+                    <img style="height:350px" class="img-responsive" src="@Url.Content("~/Content/HinhAnhSP/"+item.HinhAnh)" alt="">
+                    @*<div class="b-wrapper">
+                        <h3 style="text-align: left;font-size:15pt" class="b-animate b-from-left    b-delay03 ">
+
+
+                            @Html.Raw(item.CauHinh)
+                         
+                            <span style="text-align:center;font-size:25pt">@item.DonGia.Value.ToString("#,##") VNĐ</span>
+                        </h3>
+                    </div>*@
+                </a>
+
+
+                <p><a href="@Url.Action("ChiTietSanPham","SanPham",new { id=item.MaSp})">@item.TenSp</a></p>
+            </div>
+        }
+        <div class="clearfix"> </div>
+    </div>
+ 
+</div>

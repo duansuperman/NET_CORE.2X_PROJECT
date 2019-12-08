@@ -1,0 +1,133 @@
+﻿@using WebSiteBanHang.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<SanPham>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+@{
+    ThanhVienTB check = ViewBag.tv as ThanhVienTB;
+    string kt = Session["update"] as string;
+    if(kt == "1")
+    {
+    
+        Session["update"] = "0";
+    }
+}
+<div class="w3l_agileits_breadcrumbs">
+    <div class="w3l_agileits_breadcrumbs_inner">
+        <ul>
+            <li><a href="main-page.html">Home</a><span>«</span></li>
+
+            <li>Quản lý sản phẩm</li>
+        </ul>
+    </div>
+</div>
+<div class="inner_content_w3_agile_info two_in">
+    <h2 class="w3_inner_tittle">Quản lý sản phẩm</h2>
+    <!-- tables -->
+
+    <div class="agile-tables">
+
+        <div class="w3l-table-info agile_info_shadow">
+            @if (kt == "1")
+            {
+                <h3 class="w3_inner_tittle two">Cập nhật sản phẩm thành công </h3>
+            }
+            else
+            {
+                <h3 class="w3_inner_tittle two">Cập nhật thông tin sản phẩm </h3>
+            }
+
+            <h3 class="w3_inner_tittle two"><a href="@Url.Action("ThemMoi","QuanLySanPham")"><u>Thêm sản phẩm mới</u></a> </h3>
+            <table id="table-no-resize">
+                <thead>
+                    <tr>
+                        <th>Mã SP</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Hình ảnh</th>
+                        <th>Loại sản phẩm</th>
+                        <th>Nhà sản xuất</th>
+                        <th>Nhà cung cấp </th>
+                        <th>Số lượng tồn</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MaSP</td>
+                            <td>@item.TenSP</td>
+                            <td><img src="@Url.Content("~/Content/HinhAnhSP/"+item.HinhAnh)" style="width:100px;height:100px" /></td>
+                            <td>@Html.DisplayFor(modelitem => item.LoaiSanPham.TenLoai)</td>
+                            <td>@Html.DisplayFor(modelitem => item.NhaSanXuat.TenNSX)</td>
+                            <td>@Html.DisplayFor(modelitem => item.NhaCungCap.TenNCC)</td>
+                            <td>@item.SoLuongTon <br /><a href="@Url.Action("ThemPhieuNhap","QuanLyPhieuNhap")"><u>Nhập hàng</u></a></td>
+                            @if (item.DaXoa == false)
+                            {
+                                <td>Đã kích hoạt</td>
+                            }
+                            else
+                            {
+                                <td>Chưa kích hoạt</td>
+                            }
+                        <td>
+                            @if (check.MaLoaiTV == 1)
+                            {
+                                <a title="Xoá vĩnh viễn" onclick="Xoa(event)" href="@Url.Action("Xoa","QuanLySanPham",new { @MaSP=item.MaSP})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-remove" style="background-color:orangered">
+
+                                </a>
+                            }
+                            @if (item.DaXoa == false)
+                            {
+                                <a title="Vô hiệu hóa" href="@Url.Action("VoHieuHoa","QuanLySanPham",new { @MaSP=item.MaSP})" id="@item.MaSP" class="btn btn-info btn-flat btn-pri btn-sm fa fa-unlock">
+
+                                </a>
+                                <a title="Sửa" href="@Url.Action("Sua","QuanLySanPham",new { @MaSP=item.MaSP})" class="btn btn-info btn-flat btn-pri btn-sm fa fa-edit">
+
+                                </a>
+
+                                <a title="Chi tiết" href="@Url.Action("ChiTietSanPham","SanPham",new { id=item.MaSP})" target="_blank" class="btn btn-info btn-flat btn-pri btn-sm fa fa-product-hunt">
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a title="Kích hoạt tài khoản" href="@Url.Action("KichHoat","QuanLySanPham",new { @MaSP=item.MaSP})" id="@item.MaSP" class="btn btn-info btn-flat btn-pri btn-sm fa fa-lock">
+
+                                </a>
+                            }
+
+                        </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+    <div class="pagination col-md-9" style="float:right">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+    <div class="clearfix"></div>
+
+    <!-- //tables -->
+    <!-- /social_media-->
+    <!-- //social_media-->
+</div>
+<script type="text/javascript">
+    function Xoa(event) {
+        if (confirm('Bạn chắc chắn xóa sản phẩm?') == false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+    }
+</script>
